@@ -1,5 +1,8 @@
 /build
 /node_modules
 package-lock.json
+yarn.lock
 /build
 .eslintcache
+*.DS_Store
+*.idea/
