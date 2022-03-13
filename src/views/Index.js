@@ -28,6 +28,7 @@ import {Col, Container, Row,} from "reactstrap";
 
 
 import Header from "components/Headers/Header.js";
+import SlideShow from "../components/Slideshow";
 
 const fileTypes = ["JPEG", "PNG", "GIF", "PDF"];
 const Index = (props) => {
@@ -47,41 +48,7 @@ const Index = (props) => {
   return (
     <>
       <Header />
-      {/* Page content */}
-      <Container className="mt--7" fluid>
-        <Row>
-          <Col className="mb-5 mb-xl-0" xl="8">
-          </Col>
-          <Col xl="4">
-          </Col>
-        </Row>
-        <Row className="mt-0 justify-content-center w-100" fluid>
-          <Col className="ml-5 align-items-center justify-content-center mb-5 mb-xl-0" xl="8">
-            <FileUploader
-                multiple={true}
-                handleChange={handleChange}
-                name="file"
-                types={fileTypes}
-            />
-            <p>{file ? `File name: ${file[0]?.name}` : ""}</p>
-            {file && file[0].type === 'application/pdf'? <Document file={file[0]} onLoadSuccess={onDocumentLoadSuccess}>
-              <Col className="mt-5 scroll-y overflow-hidden">
-                {Array.from(new Array(numPages), (el, index) => (
-                    <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-                ))}
-              </Col>
-            </Document>:null}
-            {/*{file?<PDFtoIMG file={file}>*/}
-            {/*  {({pages}) => {*/}
-            {/*    if (!pages.length) return 'Loading...';*/}
-            {/*    return pages.map((page, index)=>*/}
-            {/*        <img key={index} src={page}/>*/}
-            {/*    );*/}
-            {/*  }}*/}
-            {/*</PDFtoIMG>:null}*/}
-          </Col>
-        </Row>
-      </Container>
+      <SlideShow/>
     </>
   );
 };
