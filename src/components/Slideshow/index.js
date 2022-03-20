@@ -15,7 +15,7 @@ const slides = [
         title: 'Select correct answers',
         image: 'https://upload.wikimedia.org/wikipedia/commons/d/da/Taj-Mahal.jpg',
         question: 'Identify this famous monument shown below',
-        options:[
+        options: [
             'Statue of Liberty',
             'Machu Pichu',
             'Red Fort',
@@ -27,7 +27,7 @@ const slides = [
         title: 'Select correct answers',
         image: 'https://upload.wikimedia.org/wikipedia/commons/d/da/Taj-Mahal.jpg',
         question: 'Identify this famous monument shown below',
-        options:[
+        options: [
             'Statue of Liberty',
             'Machu Pichu',
             'Red Fort',
@@ -44,34 +44,36 @@ const Slideshow = ({}) => {
 
     const fetchSlideData = async () => {
         const data = await axios({
-            url: 'https://pokeapi.co/api/v2/pokemon/',
+            url: 'https://nucleus-stage.uolo.co/slides/62377d6d17fabc803c9e7bcf',
         });
         return data;
     };
 
-    const { status, isStale, isFetching, error, data } = useQuery(
+    const {
+        data: slideshowData,
+        isLoading: slidesLoading
+    } = useQuery(
         'SlideData',
         fetchSlideData
     );
-
 
     const [slideshowData, setSlideShowData] = useState(slides);
 
     const [activeSlide, setActiveSlide] = useState(1);
 
     useEffect(() => {
-    },[]);
+    }, []);
 
 
     const handleBackClick = () => {
-      if(activeSlide > 0 ){
-          setActiveSlide(activeSlide-1);
-      }
+        if (activeSlide > 0) {
+            setActiveSlide(activeSlide - 1);
+        }
     };
     const handleForwardClick = () => {
-      if(activeSlide < slideshowData.length-1 ){
-          setActiveSlide(activeSlide+1);
-      }
+        if (activeSlide < slideshowData.length - 1) {
+            setActiveSlide(activeSlide + 1);
+        }
     };
 
     return <>
@@ -79,28 +81,29 @@ const Slideshow = ({}) => {
             {/*<Button style={styles.button} onClick={handleBackClick}>*/}
             {/*    <ArrowBack />*/}
             {/*</Button>*/}
-            <div style={{...styles.slide, backgroundColor : activeSlide === 0 ? '#6A3BE4' : 'white'}}>
+            <div style={{...styles.slide, backgroundColor: activeSlide === 0 ? '#6A3BE4' : 'white'}}>
                 {activeSlide === 0 ?
                     <text style={styles.welcomeTitle}>
                         {slideshowData[activeSlide].title}
-                    </text> :                 <text style={styles.title}>
+                    </text> : <text style={styles.title}>
                         {slideshowData[activeSlide].title}
                     </text>
                 }
-                {slideshowData[activeSlide].image ? <img style={styles.image} src={slideshowData[activeSlide].image}/> : null}
+                {slideshowData[activeSlide].image ?
+                    <img style={styles.image} src={slideshowData[activeSlide].image}/> : null}
                 <text style={styles.question}>
                     {slideshowData[activeSlide].question}
                 </text>
                 <div style={styles.options}>
-                {slideshowData[activeSlide]?.options?.map(option =>{
-                    return <text style={styles.option}>
+                    {slideshowData[activeSlide]?.options?.map(option => {
+                        return <text style={styles.option}>
                             {option}
                         </text>
-                })}
+                    })}
                 </div>
             </div>
             <div style={styles.json} collapsed={true} theme={'monokai'}>
-                <ReactJson src={slideshowData} />
+                <ReactJson src={slideshowData}/>
             </div>
             {/* <Button onClick={handleForwardClick}>*/}
             {/*    <ArrowForward/>*/}
@@ -119,29 +122,29 @@ const Slideshow = ({}) => {
 
 export default Slideshow;
 
-const styles={
-    wrapper:{
+const styles = {
+    wrapper: {
         display: 'flex',
         width: 1000,
         height: 600,
         backgroundColor: '#6A3BE4',
-        background:'linear-gradient(168.49deg, #6A3BE4 0%, #2E34B0 98.26%)',
+        background: 'linear-gradient(168.49deg, #6A3BE4 0%, #2E34B0 98.26%)',
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
         margin: '20px auto',
     },
-    json:{
+    json: {
         overflow: 'scroll',
-        margin:'20px 10px',
+        margin: '20px 10px',
         backgroundColor: 'white',
         padding: '20px 30px',
-        borderRadius:12,
+        borderRadius: 12,
         width: 600,
         height: 500,
     },
-    slide:{
-        display:'flex',
+    slide: {
+        display: 'flex',
         flexDirection: 'column',
         backgroundColor: 'white',
         height: '90%',
@@ -152,7 +155,7 @@ const styles={
         justifyContent: 'center',
         alignItems: 'center'
     },
-    welcomeTitle:{
+    welcomeTitle: {
         color: 'white',
         position: 'absolute',
         fontFamily: 'Outfit',
@@ -162,11 +165,11 @@ const styles={
         fontSize: 32,
         fontWeight: 500,
     },
-    button:{
+    button: {
         width: 30,
         height: '100%',
     },
-    title:{
+    title: {
         color: '#9D9D9D',
         position: 'absolute',
         top: 10,
@@ -174,13 +177,13 @@ const styles={
         fontWeight: 500,
         padding: '10px 20px'
     },
-    image:{
-        height:120,
+    image: {
+        height: 120,
         width: '90%',
         margin: '10px 0px',
-        borderRadius:12
+        borderRadius: 12
     },
-    question:{
+    question: {
         color: '#2C1B66',
         width: '100%',
         fontSize: 18,
@@ -188,14 +191,14 @@ const styles={
         fontWeight: 500,
         padding: '5px 10px'
     },
-    options:{
-        display:'flex',
+    options: {
+        display: 'flex',
         position: 'relative',
         width: '100%',
         marginTop: '10px',
         flexDirection: 'column'
     },
-    option:{
+    option: {
         textAlign: 'center',
         border: '1px solid #000000',
         borderRadius: 12,
@@ -205,7 +208,7 @@ const styles={
         fontSize: 16,
         padding: '10px 0px'
     },
-    actions:{
+    actions: {
         display: 'flex',
         width: '100%',
         height: 50,
@@ -213,23 +216,23 @@ const styles={
         alignItems: 'center',
         margin: '10px auto'
     },
-    approve:{
+    approve: {
         margin: '10px 10px',
         width: '20%',
         height: '100%',
         color: 'white',
         backgroundColor: 'green',
         borderRadius: 12,
-        cursor:'pointer'
+        cursor: 'pointer'
     },
-    reject:{
+    reject: {
         border: '1px solid',
         margin: '10px 10px',
         width: '20%',
         height: '100%',
         backgroundColor: 'white',
         borderRadius: 12,
-        cursor:'pointer'
+        cursor: 'pointer'
     }
 };
 
