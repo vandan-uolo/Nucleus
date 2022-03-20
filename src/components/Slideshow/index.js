@@ -1,6 +1,8 @@
 import {useEffect, useState} from "react";
 import {Button} from "@mui/material";
 import ReactJson from 'react-json-view'
+import {useQuery} from "react-query";
+import axios from "axios";
 
 const slides = [
     {
@@ -37,6 +39,85 @@ const slides = [
         title: 'Good Job !'
     },
 ];
+
+const Slideshow = ({}) => {
+
+    const fetchSlideData = async () => {
+        const data = await axios({
+            url: 'https://pokeapi.co/api/v2/pokemon/',
+        });
+        return data;
+    };
+
+    const { status, isStale, isFetching, error, data } = useQuery(
+        'SlideData',
+        fetchSlideData
+    );
+
+
+    const [slideshowData, setSlideShowData] = useState(slides);
+
+    const [activeSlide, setActiveSlide] = useState(1);
+
+    useEffect(() => {
+    },[]);
+
+
+    const handleBackClick = () => {
+      if(activeSlide > 0 ){
+          setActiveSlide(activeSlide-1);
+      }
+    };
+    const handleForwardClick = () => {
+      if(activeSlide < slideshowData.length-1 ){
+          setActiveSlide(activeSlide+1);
+      }
+    };
+
+    return <>
+        <div style={styles.wrapper}>
+            {/*<Button style={styles.button} onClick={handleBackClick}>*/}
+            {/*    <ArrowBack />*/}
+            {/*</Button>*/}
+            <div style={{...styles.slide, backgroundColor : activeSlide === 0 ? '#6A3BE4' : 'white'}}>
+                {activeSlide === 0 ?
+                    <text style={styles.welcomeTitle}>
+                        {slideshowData[activeSlide].title}
+                    </text> :                 <text style={styles.title}>
+                        {slideshowData[activeSlide].title}
+                    </text>
+                }
+                {slideshowData[activeSlide].image ? <img style={styles.image} src={slideshowData[activeSlide].image}/> : null}
+                <text style={styles.question}>
+                    {slideshowData[activeSlide].question}
+                </text>
+                <div style={styles.options}>
+                {slideshowData[activeSlide]?.options?.map(option =>{
+                    return <text style={styles.option}>
+                            {option}
+                        </text>
+                })}
+                </div>
+            </div>
+            <div style={styles.json} collapsed={true} theme={'monokai'}>
+                <ReactJson src={slideshowData} />
+            </div>
+            {/* <Button onClick={handleForwardClick}>*/}
+            {/*    <ArrowForward/>*/}
+            {/*</Button>*/}
+        </div>
+        <div style={styles.actions}>
+            <Button style={styles.approve}>
+                {'Approve'}
+            </Button>
+            <Button style={styles.reject}>
+                {'Reject'}
+            </Button>
+        </div>
+    </>;
+};
+
+export default Slideshow;
 
 const styles={
     wrapper:{
@@ -152,73 +233,4 @@ const styles={
     }
 };
 
-
-
-const Slideshow = ({}) => {
-
-    const [slideshowData, setSlideShowData] = useState(slides);
-
-    const [activeSlide, setActiveSlide] = useState(1);
-
-    useEffect(() => {
-    },[]);
-
-
-    const handleBackClick = () => {
-      if(activeSlide > 0 ){
-          setActiveSlide(activeSlide-1);
-      }
-    };
-    const handleForwardClick = () => {
-      if(activeSlide < slideshowData.length-1 ){
-          setActiveSlide(activeSlide+1);
-      }
-    };
-
-    return <>
-        <div style={styles.wrapper}>
-            {/*<Button style={styles.button} onClick={handleBackClick}>*/}
-            {/*    <ArrowBack />*/}
-            {/*</Button>*/}
-            <div style={{...styles.slide, backgroundColor : activeSlide === 0 ? '#6A3BE4' : 'white'}}>
-                {activeSlide === 0 ?
-                    <text style={styles.welcomeTitle}>
-                        {slideshowData[activeSlide].title}
-                    </text> :                 <text style={styles.title}>
-                        {slideshowData[activeSlide].title}
-                    </text>
-                }
-                {slideshowData[activeSlide].image ? <img style={styles.image} src={slideshowData[activeSlide].image}/> : null}
-                <text style={styles.question}>
-                    {slideshowData[activeSlide].question}
-                </text>
-                <div style={styles.options}>
-                {slideshowData[activeSlide]?.options?.map(option =>{
-                    return <text style={styles.option}>
-                            {option}
-                        </text>
-                })}
-                </div>
-            </div>
-            <div style={styles.json} collapsed={true} theme={'monokai'}>
-                <ReactJson src={slideshowData} />
-            </div>
-            {/* <Button onClick={handleForwardClick}>*/}
-            {/*    <ArrowForward/>*/}
-            {/*</Button>*/}
-        </div>
-        <div style={styles.actions}>
-            <Button style={styles.approve}>
-                {'Approve'}
-            </Button>
-            <Button style={styles.reject}>
-                {'Reject'}
-            </Button>
-        </div>
-    </>;
-};
-
-
-
-export default Slideshow;
 

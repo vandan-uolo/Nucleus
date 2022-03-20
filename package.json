@@ -63,6 +63,7 @@
     "react-json-view": "^1.21.3",
     "react-pdf": "^5.7.1",
     "react-pdf-to-image": "^1.0.2",
+    "react-query": "^3.34.16",
     "react-redux": "^7.2.6",
     "react-router-dom": "5.2.0",
     "react-scripts": "4.0.3",
