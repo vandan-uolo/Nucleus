@@ -31,6 +31,7 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import {Link} from "react-router-dom";
 
 const Login = () => {
   return (
@@ -42,28 +43,12 @@ const Login = () => {
               <small>Sign in with</small>
             </div>
             <div className="btn-wrapper text-center">
-              <Button
-                className="btn-neutral btn-icon"
-                color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
+              <Link
+                  to={"/admin/index"}
               >
-                <span className="btn-inner--icon">
-                  <img
-                    alt="..."
-                    src={
-                      require("../../assets/img/icons/common/github.svg")
-                        .default
-                    }
-                  />
-                </span>
-                <span className="btn-inner--text">Github</span>
-              </Button>
               <Button
                 className="btn-neutral btn-icon"
                 color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
               >
                 <span className="btn-inner--icon">
                   <img
@@ -76,6 +61,7 @@ const Login = () => {
                 </span>
                 <span className="btn-inner--text">Google</span>
               </Button>
+              </Link>
             </div>
           </CardHeader>
           <CardBody className="px-lg-5 py-lg-5">
@@ -125,9 +111,13 @@ const Login = () => {
                 </label>
               </div>
               <div className="text-center">
+                <Link
+                  to={"/admin/index"}
+                  >
                 <Button className="my-4" color="primary" type="button">
                   Sign in
                 </Button>
+                </Link>
               </div>
             </Form>
           </CardBody>
@@ -143,13 +133,13 @@ const Login = () => {
             </a>
           </Col>
           <Col className="text-right" xs="6">
-            <a
+            <Link
               className="text-light"
-              href="#pablo"
-              onClick={(e) => e.preventDefault()}
+              to="/auth/register"
+              // onClick={(e) => e.preventDefault()}
             >
               <small>Create new account</small>
-            </a>
+            </Link>
           </Col>
         </Row>
       </Col>

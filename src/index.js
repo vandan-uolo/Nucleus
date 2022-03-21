@@ -17,6 +17,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import "assets/plugins/nucleo/css/nucleo.css";
@@ -26,13 +27,17 @@ import "assets/scss/argon-dashboard-react.scss";
 import AdminLayout from "layouts/Admin.js";
 import AuthLayout from "layouts/Auth.js";
 
+const queryClient = new QueryClient()
+
 ReactDOM.render(
   <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
     <Switch>
       <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
       <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
       <Redirect from="/" to="/admin/index" />
     </Switch>
+      </QueryClientProvider>
   </BrowserRouter>,
   document.getElementById("root")
 );
