@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/vandan-uolo/Nucleus/issues"
   },
-  "homepage": "https://github.com/vandan-uolo/Nucleus",
+  "homepage": "https://github.com/vandan-uolo/Nucleus/admin/index",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
