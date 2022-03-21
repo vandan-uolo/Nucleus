@@ -1,3 +1,4 @@
+
 export const mockData = {
     "id": "slide_id",
     "type": "void",
