@@ -1,122 +1,85 @@
 import {useEffect, useState} from "react";
-import {Button} from "@mui/material";
+import {useLocation} from "react-router-dom";
 import ReactJson from 'react-json-view'
 import {useQuery} from "react-query";
 import axios from "axios";
 
-const slides = [
-    {
-        order: 0,
-        title: 'Revision Quiz - 01',
-        metaData: `Shared By - Savita Ma'am`
-    },
-    {
-        order: 1,
-        title: 'Select correct answers',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/d/da/Taj-Mahal.jpg',
-        question: 'Identify this famous monument shown below',
-        options: [
-            'Statue of Liberty',
-            'Machu Pichu',
-            'Red Fort',
-            'Taj Mahal'
-        ]
-    },
-    {
-        order: 2,
-        title: 'Select correct answers',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/d/da/Taj-Mahal.jpg',
-        question: 'Identify this famous monument shown below',
-        options: [
-            'Statue of Liberty',
-            'Machu Pichu',
-            'Red Fort',
-            'Taj Mahal'
-        ]
-    },
-    {
-        order: 3,
-        title: 'Good Job !'
-    },
-];
+const api = 'https://nucleus-stage.uolo.co';
+
 
 const Slideshow = ({}) => {
 
-    const fetchSlideData = async () => {
-        const data = await axios({
-            url: 'https://nucleus-stage.uolo.co/slides/62377d6d17fabc803c9e7bcf',
-        });
-        return data;
+    let location = useLocation();
+
+    const fetchSlideData = async (id) => {
+        return await axios.get(`${api}/slides/${id}`);
     };
+
+    const [slideData, setSlideData] = useState({});
 
     const {
         data: slideshowData,
         isLoading: slidesLoading
     } = useQuery(
         'SlideData',
-        fetchSlideData
+        () => fetchSlideData(location?.search?.split('=')[1])
     );
 
-    const [slideshowData, setSlideShowData] = useState(slides);
-
-    const [activeSlide, setActiveSlide] = useState(1);
-
     useEffect(() => {
-    }, []);
+        console.log('test ',slideshowData?.data?.slide?.content);
+        setSlideData(slideshowData?.data?.slide?.content);
+    }, [slideshowData]);
 
 
-    const handleBackClick = () => {
-        if (activeSlide > 0) {
-            setActiveSlide(activeSlide - 1);
-        }
-    };
-    const handleForwardClick = () => {
-        if (activeSlide < slideshowData.length - 1) {
-            setActiveSlide(activeSlide + 1);
-        }
-    };
+    // const handleBackClick = () => {
+    //     if (activeSlide > 0) {
+    //         setActiveSlide(activeSlide - 1);
+    //     }
+    // };
+    // const handleForwardClick = () => {
+    //     if (activeSlide < slideshowData.length - 1) {
+    //         setActiveSlide(activeSlide + 1);
+    //     }
+    // };
 
     return <>
         <div style={styles.wrapper}>
-            {/*<Button style={styles.button} onClick={handleBackClick}>*/}
-            {/*    <ArrowBack />*/}
-            {/*</Button>*/}
-            <div style={{...styles.slide, backgroundColor: activeSlide === 0 ? '#6A3BE4' : 'white'}}>
-                {activeSlide === 0 ?
-                    <text style={styles.welcomeTitle}>
-                        {slideshowData[activeSlide].title}
-                    </text> : <text style={styles.title}>
-                        {slideshowData[activeSlide].title}
+            {slideData?.question ? <>
+                <div style={{...styles.slide, backgroundColor: 'white'}}>
+                    {/*{activeSlide === 0 ?*/}
+                    {/*    <text style={styles.welcomeTitle}>*/}
+                    {/*        {slideshowData[activeSlide].title}*/}
+                    {/*    </text> : <text style={styles.title}>*/}
+                    {/*        {slideshowData[activeSlide].title}*/}
+                    {/*    </text>*/}
+                    {/*}*/}
+                    {slideData.question?.fragments?.length > 0 ?
+                        <img style={styles.image} src={slideData.question?.fragment[0].url}/> : <img style={styles.image} src={'https://images.unsplash.com/photo-1553613599-d0f3dd9416ae?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bGFkeSUyMGxpYmVydHl8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60'}/>}
+                    <text style={styles.question}>
+                        {slideData.question?.text}
                     </text>
-                }
-                {slideshowData[activeSlide].image ?
-                    <img style={styles.image} src={slideshowData[activeSlide].image}/> : null}
-                <text style={styles.question}>
-                    {slideshowData[activeSlide].question}
-                </text>
-                <div style={styles.options}>
-                    {slideshowData[activeSlide]?.options?.map(option => {
-                        return <text style={styles.option}>
-                            {option}
-                        </text>
-                    })}
+                    <div style={styles.options}>
+                        {slideData.question?.options?.map(option => {
+                            return <text key={option._id} style={{...styles.option, backgroundColor: option?.text === slideData?.answer?.options[0]?.text ? 'green' : 'white'}}>
+                                {option?.text}
+                            </text>
+                        })}
+                    </div>
                 </div>
-            </div>
-            <div style={styles.json} collapsed={true} theme={'monokai'}>
-                <ReactJson src={slideshowData}/>
-            </div>
-            {/* <Button onClick={handleForwardClick}>*/}
-            {/*    <ArrowForward/>*/}
-            {/*</Button>*/}
+                <div style={styles.json} collapsed={true} theme={'monokai'}>
+                    <ReactJson src={slideData}/>
+                </div>
+                </>
+            :null}
         </div>
-        <div style={styles.actions}>
-            <Button style={styles.approve}>
-                {'Approve'}
-            </Button>
-            <Button style={styles.reject}>
-                {'Reject'}
-            </Button>
-        </div>
+        {/*<div style={styles.actions}>*/}
+        {/*    <Button style={styles.approve}>*/}
+        {/*        {'Approve'}*/}
+        {/*    </Button>*/}
+        {/*    <Button style={styles.reject}>*/}
+        {/*        {'Reject'}*/}
+        {/*    </Button>*/}
+        {/*</div>*/}
     </>;
 };
 
@@ -178,7 +141,7 @@ const styles = {
         padding: '10px 20px'
     },
     image: {
-        height: 120,
+        height: 200,
         width: '90%',
         margin: '10px 0px',
         borderRadius: 12
